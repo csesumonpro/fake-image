@@ -18,12 +18,37 @@
       <el-main>
         <el-row>
           <el-col :span="12" :offset="6">
-            <el-form label-width="120px" size="mini" label-position="left">
+            <el-form label-width="150px" size="mini" label-position="left" class="image-form">
               <el-form-item label="Width">
                 <el-input @change="generateImage" v-model="image.width"></el-input>
               </el-form-item>
               <el-form-item label="Height">
                 <el-input @change="generateImage" v-model="image.height"></el-input>
+              </el-form-item>
+              <el-form-item label="Text Color">
+                <el-color-picker @change="generateImage" v-model="image.textcolor"></el-color-picker>
+              </el-form-item>
+              <el-form-item label="Background Color">
+                <el-color-picker @change="generateImage" v-model="image.bgcolor"></el-color-picker>
+              </el-form-item>
+              <el-form-item label="Font Size">
+                <el-slider
+                  @change="generateImage"
+                  :min="10"
+                  :max="200"
+                  v-model="image.textSize"
+                  show-input
+                ></el-slider>
+              </el-form-item>
+              <el-form-item label="Font Style">
+                <el-radio-group @change="generateImage" v-model="image.textFontStyle">
+                  <el-radio label="Normal"></el-radio>
+                  <el-radio label="Bold"></el-radio>
+                  <el-radio label="Italic"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="Data URI">
+                <el-input type="textarea" v-model="inputDataUrl" readonly="readonly"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -36,14 +61,14 @@
         <img alt="Preview Image" id="imagePreview" v-show="false" />
       </div>
     </el-row>
-     <a
-        style="text-decoration:none"
-          :href="inputDataUrl"
-          v-if="downloadValidate"
-          :download="`fake-image-${image.width}_${image_height}`"
-        >
-          <el-button type="primary" style="margin:20px auto;display:block">Download Image</el-button>
-        </a>
+    <a
+      style="text-decoration:none"
+      :href="inputDataUrl"
+      v-if="downloadValidate"
+      :download="`fake-image-${image.width}_${image_height}`"
+    >
+      <el-button type="primary" style="margin:20px auto;display:block">Download Image</el-button>
+    </a>
   </div>
 </template>
 <script>
@@ -57,7 +82,9 @@ export default {
         height: 200,
         bgcolor: "#ddd",
         textcolor: "#000",
-        text: "sumon"
+        text: "sumon",
+        textSize: 20,
+        textFontStyle: "normal"
       }
     };
   },
@@ -89,12 +116,13 @@ export default {
       element.height = this.image.height;
 
       // Fill in the background
-      context.fillStyle = "#aaaaaa";
+      context.fillStyle = this.image.bgcolor;
       context.fillRect(0, 0, element.width, element.height);
 
       // Place the text
-      context.font = "bold 90px sans-serif";
-      context.fillStyle = "#333333";
+      context.font =
+        this.image.textFontStyle + " " + this.image.textSize + "px sans-serif";
+      context.fillStyle = this.image.textcolor;
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillText(
@@ -123,5 +151,10 @@ export default {
 }
 .github {
   text-align: right;
+}
+.image-form .el-form-item__label {
+  font-size: 15px;
+  font-weight: bold;
+  color: #000000;
 }
 </style>
