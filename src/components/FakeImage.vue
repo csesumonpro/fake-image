@@ -20,10 +20,10 @@
           <el-col :span="12" :offset="6">
             <el-form label-width="150px" size="mini" label-position="left" class="image-form">
               <el-form-item label="Width">
-                <el-input @change="generateImage" v-model="image.width"></el-input>
+                <el-input-number @change="generateImage" :max="9999" v-model="image.width"></el-input-number>
               </el-form-item>
               <el-form-item label="Height">
-                <el-input @change="generateImage" v-model="image.height"></el-input>
+                <el-input-number @change="generateImage" :max="9999" v-model="image.height"></el-input-number>
               </el-form-item>
               <el-form-item label="Text Color">
                 <el-color-picker @change="generateImage" v-model="image.textcolor"></el-color-picker>
@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     downloadValidate() {
-      if (this.image.height > 50 && this.image.width > 50) {
+      if (this.image.height > 10 && this.image.width > 10) {
         return true;
       }
       return false;
@@ -135,6 +135,8 @@ export default {
   },
   mounted() {
     this.generateImage();
+    // const params = new URL(location.href).searchParams.get('size')
+    // console.log(params);
   }
 };
 </script>
